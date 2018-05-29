@@ -28,7 +28,7 @@ rule "RAN_C_001"
 	//@DateDebutValidite:
 	//@DateFinValidite:
 	//@populations: 
-	//@severite:
+	@Bloquante
 	@Libelle("La date de début du contrat est postérieure ou égale à la date d'entrée dans la FPE ou dans la carrière militaire.")
 	@Commentaire("Nous avons effectué telle correctif dans la règle...")
     when

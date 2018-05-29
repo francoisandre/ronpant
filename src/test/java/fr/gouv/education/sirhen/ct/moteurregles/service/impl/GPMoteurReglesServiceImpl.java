@@ -3,6 +3,7 @@ package fr.gouv.education.sirhen.ct.moteurregles.service.impl;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -36,7 +37,8 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 	private final static String NOM_ANNOTATION_DATE_DEBUT_VALIDITE = "datedebutvalidite";
 	private final static String NOM_ANNOTATION_DATE_FIN_VALIDITE = "datefinvalidite";
 	private final static String NOM_ANNOTATION_POPULATIONS = "populations";
-	private final static String NOM_ANNOTATION_SEVERITE = "severite";
+	private final static String NOM_ANNOTATION_BLOQUANTE = "bloquante";
+	private final static String NOM_ANNOTATION_IGNORE = "ignore";
 	private final static String NOM_ANNOTATION_LIBELLE = "libelle";
 	private final static String NOM_ANNOTATION_COMMENTAIRE = "commentaire";
 
@@ -112,9 +114,35 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 							CaseInsensitiveList annotations = new CaseInsensitiveList();
 							annotations.addAll(descripteur.getAnnotationNames());
 
+							if (annotations.contains(NOM_ANNOTATION_IGNORE)) {
+								// L'annotation @Ignore est présente, la règle est ignorée
+								continue;
+							}
+
 							if (annotations.contains(NOM_ANNOTATION_CODE_ONP)) {
 								regle.setCode(descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_CODE_ONP))
 									.getSingleValue());
+							}
+
+							if (annotations.contains(NOM_ANNOTATION_LIBELLE)) {
+								regle.setLibelle(descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_LIBELLE))
+									.getSingleValue());
+							}
+
+							if (annotations.contains(NOM_ANNOTATION_LIBELLE)) {
+								regle.setLibelle(descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_LIBELLE))
+									.getSingleValue());
+							}
+
+							regle.setBloquante(annotations.contains(NOM_ANNOTATION_BLOQUANTE));
+
+							if (annotations.contains(NOM_ANNOTATION_EVENEMENTS)) {
+								String aux = descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_EVENEMENTS))
+									.getSingleValue();
+								String[] split = aux.split(",");
+								regle.setEvenements(Arrays.asList(split));
+							} else {
+								regle.setEvenements(new ArrayList <>());
 							}
 
 							resultat.add(regle);
@@ -131,12 +159,6 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 
 		return resultat;
 
-	}
-
-	private void conversionMinuscule(final List < String > liste) {
-		for (int i = 0, l = liste.size(); i < l; ++i) {
-			liste.set(i, liste.get(i).toLowerCase());
-		}
 	}
 
 	public Resource[] getFichiersRegles() {
