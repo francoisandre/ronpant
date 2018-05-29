@@ -1,0 +1,51 @@
+/*
+ * Copyright 2010 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.drools.examples.helloworld
+dialect "mvel"
+ 
+import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.Message;
+import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.AgentFait;
+import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.ContratFait;
+
+rule "RAN_C_001"
+    @CodeONP(RAN_C_001)
+	@NoyauONP(16.00.00)
+	@Evenements(EVT1, EVT2) 
+	//@DateDebutValidite:
+	//@DateFinValidite:
+	//@populations: 
+	//@severite:
+	@Libelle("La date de début du contrat est postérieure ou égale à la date d'entrée dans la FPE ou dans la carrière militaire.")
+	@Commentaire("Nous avons effectué telle correctif dans la règle...")
+    when
+        m : Message( status == Message.HELLO, message : message )
+    then
+        System.out.println( message );
+//        modify ( m ) { setMessage( "Goodbyte cruel world" ),
+//                       setStatus( Message.GOODBYE ) };
+    modify ( m ) { message = "Goodbye cruel world",
+                   status = Message.GOODBYE };
+end
+
+rule "Good Bye"
+    dialect "java"
+    when
+    	//toto
+        Message( status == Message.GOODBYE, message : message )
+    then
+        System.out.println( message );
+end
