@@ -1,22 +1,38 @@
 package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 
-import java.util.List;
-
-import fr.gouv.education.sirhen.ct.moteurregles.commun.IRegle;
-import fr.gouv.education.sirhen.ct.moteurregles.commun.impl.Resultat;
+import fr.gouv.education.sirhen.ct.moteurregles.service.impl.ExecutionRegle;
+import fr.gouv.education.sirhen.ct.moteurregles.service.impl.GPResultat;
 
 public abstract class AbstractTestRegles {
 
-	protected boolean regleEstVerifiee(final String nomRegle, final Resultat resultatExecution) throws Exception {
+	protected boolean regleEstVerifiee(final String nomRegle, final GPResultat resultatExecution) throws Exception {
 
-		List < IRegle > regles = resultatExecution.getRegles();
-		for (IRegle regle : regles) {
-			if (regle.getCode().equalsIgnoreCase(nomRegle)) {
-				return regle.getVerifiee();
+		ExecutionRegle execution = resultatExecution.getExecution(nomRegle);
+		if (execution == null) {
+			throw new Exception("Règle " + nomRegle + "non présente dans l'exécution");
+		} else {
+			if (execution.getTypeExecution().equals(ExecutionRegle.REGLE_VERIFIEE)) {
+				return true;
+			} else {
+				throw new Exception("La règle " + nomRegle + "a comme statut: " + execution.getTypeExecution());
 			}
 		}
 
-		throw new Exception("Règle " + nomRegle + "non présente");
+	}
+
+	protected boolean regleEstNonVerifiee(final String nomRegle, final GPResultat resultatExecution) throws Exception {
+
+		ExecutionRegle execution = resultatExecution.getExecution(nomRegle);
+		if (execution == null) {
+			throw new Exception("Règle " + nomRegle + "non présente dans l'exécution");
+		} else {
+			if (execution.getTypeExecution().equals(ExecutionRegle.REGLE_NON_VERIFIEE)) {
+				return true;
+			} else {
+				throw new Exception("La règle " + nomRegle + "a comme statut: " + execution.getTypeExecution());
+			}
+		}
+
 	}
 
 }

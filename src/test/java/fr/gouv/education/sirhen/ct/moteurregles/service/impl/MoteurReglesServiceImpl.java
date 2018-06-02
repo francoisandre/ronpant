@@ -108,7 +108,7 @@ public class MoteurReglesServiceImpl implements IMoteurReglesService {
 	 *            Le type d'évènement.
 	 * @return résultat de l'exécution.
 	 */
-	public final Resultat executerRegles(final Set < IFait > faits, final String typeEvenement) {
+	public Resultat executerRegles(final Set < IFait > faits, final String typeEvenement) {
 		Resultat ret = new Resultat();
 		// On rajoute les règles au faits
 		final List < IRegle > regles = getListeRegles(typeEvenement);
@@ -145,7 +145,7 @@ public class MoteurReglesServiceImpl implements IMoteurReglesService {
 	 *
 	 * @return la liste de règles
 	 */
-	public final List < IRegle > getListeRegles() {
+	public List < IRegle > getListeRegles() {
 		return getListeRegles(null);
 	}
 

@@ -1,0 +1,17 @@
+package org.drools.examples.helloworld
+dialect "mvel"
+ 
+import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.ContratFait;
+
+rule "RAN_C_515FAKE"
+    @CodeONP(RAN_C_515FAKE)
+	@NoyauONP(16.10.00)
+	@Evenements(T1592) 
+	@Populations(P0195)
+	@Bloquante
+	@Libelle("Le type de lien juridique est un contrat de droit public.")
+    when
+        eval(true)
+    then
+        
+end

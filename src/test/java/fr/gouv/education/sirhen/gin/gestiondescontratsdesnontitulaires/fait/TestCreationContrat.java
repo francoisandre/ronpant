@@ -3,8 +3,8 @@ package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,8 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
-import fr.gouv.education.sirhen.ct.moteurregles.commun.impl.Resultat;
-import fr.gouv.education.sirhen.ct.moteurregles.service.IMoteurReglesService;
+import fr.gouv.education.sirhen.ct.moteurregles.service.impl.GPMoteurReglesServiceImpl;
+import fr.gouv.education.sirhen.ct.moteurregles.service.impl.GPResultat;
 import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.evenement.Constantes;
 
 @ContextConfiguration(classes = TestConfiguration.class)
@@ -23,7 +23,7 @@ import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.evenement
 public class TestCreationContrat extends AbstractTestRegles {
 
 	@Autowired
-	IMoteurReglesService moteurRegle;
+	GPMoteurReglesServiceImpl moteurRegle;
 
 	/**
 	 * Test la règle : La date de début du contrat est postérieure ou égale à la date d'entrée dans la FPE ou dans la carrière
@@ -32,13 +32,13 @@ public class TestCreationContrat extends AbstractTestRegles {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRegleRAN_C_OO1() throws Exception {
+	public void testRegleRAN_C_001() throws Exception {
 
 		// On fait les IFait nécessaires
 		AgentFait agent = new AgentFait();
 		agent.setDateEntreeFonctionPublique(parseDate("01/09/2017"));
 		agent.setDateLimiteRetraite(parseDate("01/09/2035"));
-		agent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
+		agent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
 
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
@@ -47,32 +47,32 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_001 doit être vérifiée", regleEstVerifiee("RAN_C_001", resultatExecution));
 
 		AgentFait autreAgent = new AgentFait();
 		autreAgent.setDateEntreeFonctionPublique(parseDate("02/09/2017"));
 		autreAgent.setDateLimiteRetraite(parseDate("01/09/2035"));
-		autreAgent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
-		faits = new TreeSet <>();
+		autreAgent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
+		faits = new HashSet <>();
 		faits.add(autreAgent);
 		faits.add(contrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_001 doit être non vérifiée", regleEstVerifiee("RAN_C_001", resultatExecution));
 
 		AgentFait encoreUnautreAgent = new AgentFait();
 		encoreUnautreAgent.setDateLimiteRetraite(parseDate("01/09/2035"));
-		encoreUnautreAgent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
-		faits = new TreeSet <>();
+		encoreUnautreAgent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
+		faits = new HashSet <>();
 		faits.add(encoreUnautreAgent);
 		faits.add(contrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_001 doit être non vérifiée", regleEstVerifiee("RAN_C_001", resultatExecution));
 
 	}
@@ -83,12 +83,12 @@ public class TestCreationContrat extends AbstractTestRegles {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRegleRAN_C_OO5() throws Exception {
+	public void testRegleRAN_C_005() throws Exception {
 		// On fait les IFait nécessaires
 		AgentFait agent = new AgentFait();
 		agent.setDateEntreeFonctionPublique(parseDate("01/09/2017"));
 		agent.setDateLimiteRetraite(parseDate("01/09/2035"));
-		agent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
+		agent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
 
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
@@ -97,11 +97,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_005 doit être vérifiée", regleEstVerifiee("RAN_C_005", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -110,11 +110,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeContrat("CDD");
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_005 doit être non vérifiée", regleEstVerifiee("RAN_C_005", resultatExecution));
 	}
 
@@ -124,12 +124,12 @@ public class TestCreationContrat extends AbstractTestRegles {
 	 * @throws Exception
 	 */
 	@Test
-	public void testRegleRAN_C_1O5() throws Exception {
+	public void testRegleRAN_C_105() throws Exception {
 		// On fait les IFait nécessaires
 		AgentFait agent = new AgentFait();
 		agent.setDateEntreeFonctionPublique(parseDate("01/09/2017"));
 		agent.setDateLimiteRetraite(parseDate("01/09/2035"));
-		agent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
+		agent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
 
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
@@ -139,11 +139,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_105 doit être vérifiée", regleEstVerifiee("RAN_C_105", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -154,11 +154,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
 
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_105 doit être non vérifiée", regleEstVerifiee("RAN_C_105", resultatExecution));
 	}
 
@@ -173,7 +173,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		AgentFait agent = new AgentFait();
 		agent.setDateEntreeFonctionPublique(parseDate("01/09/2017"));
 		agent.setDateLimiteRetraite(parseDate("01/09/2035"));
-		agent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
+		agent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
 
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
@@ -183,11 +183,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_024 doit être vérifiée", regleEstVerifiee("RAN_C_024", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -196,11 +196,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeContrat("CDD");
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_024 doit être non vérifiée", regleEstVerifiee("RAN_C_024", resultatExecution));
 	}
 
@@ -215,7 +215,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		AgentFait agent = new AgentFait();
 		agent.setDateEntreeFonctionPublique(parseDate("01/09/2017"));
 		agent.setDateLimiteRetraite(parseDate("15/09/2018"));
-		agent.setCodePopulation(AgentFait.CODE_POPULATION.P0199.name());
+		agent.setCodePopulation(IPopulations.MAITRE_DU_PRIVE);
 
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
@@ -225,11 +225,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_124 doit être vérifiée", regleEstVerifiee("RAN_C_124", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -239,11 +239,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeContrat("CDD");
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(agent);
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_124 doit être non vérifiée", regleEstVerifiee("RAN_C_124", resultatExecution));
 	}
 
@@ -263,10 +263,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_927 doit être vérifiée", regleEstVerifiee("RAN_C_927", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -274,10 +274,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
 		autreContrat.setTypeContrat("CDD");
 		autreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_927 doit être non vérifiée", regleEstVerifiee("RAN_C_927", resultatExecution));
 
 		ContratFait encoreUnAutreContrat = new ContratFait();
@@ -285,10 +285,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		encoreUnAutreContrat.setTypeContrat("CDD");
 		encoreUnAutreContrat.setIdContrat("DUPOND20180016");
 		encoreUnAutreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(encoreUnAutreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_927 doit être non vérifiée", regleEstVerifiee("RAN_C_927", resultatExecution));
 	}
 
@@ -307,10 +307,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_400 doit être vérifiée", regleEstVerifiee("RAN_C_400", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -319,10 +319,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeContrat("CDD");
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_400 doit être non vérifiée", regleEstVerifiee("RAN_C_400", resultatExecution));
 	}
 
@@ -341,10 +341,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
+		Set < IFait > faits = new HashSet <>();
 		faits.add(contrat);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_451 doit être vérifiée", regleEstVerifiee("RAN_C_451", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -353,16 +353,16 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeContrat("AE");
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
-		faits = new TreeSet <>();
+		faits = new HashSet <>();
 		faits.add(autreContrat);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertFalse("La règle RAN_C_451 doit être non vérifiée", regleEstVerifiee("RAN_C_451", resultatExecution));
 	}
 
 	/**
 	 * Test la rèle : Le type de lien juridique est un contrat de droit public.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Test
@@ -375,10 +375,18 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
-		Set < IFait > faits = new TreeSet <>();
-		faits.add(contrat);
+		// On est obligé d'ajouter un fait pour indiquer la population
+		FournisseurPopulationBasique population = new FournisseurPopulationBasique(IPopulations.MAITRE_DU_PRIVE);
 
-		Resultat resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		Set < IFait > faits = new HashSet <>();
+		faits.add(contrat);
+		faits.add(population);
+
+		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		Assert.assertTrue("La règle RAN_C_514 doit être vérifiée", regleEstVerifiee("RAN_C_514", resultatExecution));
+		System.out.println(resultatExecution);
+
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_514 doit être vérifiée", regleEstVerifiee("RAN_C_514", resultatExecution));
 
 		ContratFait autreContrat = new ContratFait();
@@ -386,11 +394,13 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
 		autreContrat.setTypeContrat("CDD");
 		autreContrat.setIdContrat("DUPOND20180016");
-		faits = new TreeSet <>();
+		// autreContrat.setTypeLienJuridique("02");
+		faits = new HashSet <>();
 		faits.add(autreContrat);
+		faits.add(population);
 
-		resultatExecution = moteurRegle.executerRegles(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_514 doit être non vérifiée", regleEstVerifiee("RAN_C_514", resultatExecution));
+		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
+		Assert.assertTrue("La règle RAN_C_514 doit être non vérifiée", regleEstNonVerifiee("RAN_C_514", resultatExecution));
 	}
 
 	/**

@@ -4,12 +4,7 @@ import java.util.Date;
 
 import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
 
-public class AgentFait implements IFait {
-
-	public enum CODE_POPULATION {
-		P0199, // Maître du privé (inclus Maître du privé sur coucours et Maître délégué établ. privé sous contrat d'association)
-		P0223 // Maître délégué établ. privé sous contrat simple
-	}
+public class AgentFait implements IFait, IFournisseurPopulation {
 
 	private Date dateEntreeFonctionPublique;
 	private Date dateLimiteRetraite;

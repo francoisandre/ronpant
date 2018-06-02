@@ -20,10 +20,10 @@ dialect "mvel"
 import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.AgentFait;
 import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.ContratFait;
 
-rule "RAN_C_001"
-    @CodeONP(RAN_C_001)
+rule "RAN_C_FAUSSE"
+    @CodeONP(RAN_C_FAUSSE)
 	@NoyauONP(16.00.00)
-	@Evenements(T1592) 
+	@Evenements(T1593) 
 	@Populations(P0199)
 	@Bloquante
 	@Libelle("La date de début du contrat est postèrieure ou égale à la date d'entrée dans la FPE ou dans la carrière militaire.")
@@ -31,5 +31,5 @@ rule "RAN_C_001"
     when
         eval(true)
     then
-        System.out.println( "Coucou");
+        System.out.println( "Coucou FAKE");
 end

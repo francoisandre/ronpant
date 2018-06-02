@@ -2,10 +2,18 @@ package fr.gouv.education.sirhen.ct.moteurregles.service.impl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.io.IOUtils;
 import org.drools.compiler.compiler.DrlParser;
 import org.drools.compiler.compiler.DroolsParserException;
@@ -18,53 +26,39 @@ import org.kie.api.builder.KieModule;
 import org.kie.api.builder.KieRepository;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import fr.gouv.education.sirhen.ct.moteurregles.commun.IRegle;
+import fr.gouv.education.sirhen.ct.commun.transverse.exception.TechniqueExceptionFactory;
+import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
 import fr.gouv.education.sirhen.ct.moteurregles.commun.impl.Regle;
 import fr.gouv.education.sirhen.ct.moteurregles.transverse.Constantes;
-import fr.gouv.education.sirhen.ct.socle.configuration.ConfigurationComposantTechnique;
+import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.IFournisseurJourExecution;
+import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.IFournisseurPopulation;
 
-public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
-
-	private final static String NOM_ANNOTATION_CODE_ONP = "codeonp";
-	private final static String NOM_ANNOTATION_NOYAU_ONP = "noyauonp";
-	private final static String NOM_ANNOTATION_EVENEMENTS = "evenements";
-	private final static String NOM_ANNOTATION_DATE_DEBUT_VALIDITE = "datedebutvalidite";
-	private final static String NOM_ANNOTATION_DATE_FIN_VALIDITE = "datefinvalidite";
-	private final static String NOM_ANNOTATION_POPULATIONS = "populations";
-	private final static String NOM_ANNOTATION_BLOQUANTE = "bloquante";
-	private final static String NOM_ANNOTATION_IGNORE = "ignore";
-	private final static String NOM_ANNOTATION_LIBELLE = "libelle";
-	private final static String NOM_ANNOTATION_COMMENTAIRE = "commentaire";
+public class GPMoteurReglesServiceImpl implements IGPAnnotations {
 
 	private static final String CLASSPATH_RULES_DRL = "classpath*:**/rules/**/*.drl";
 
 	protected KieContainer kieContainer;
 
-	private KieServices kieServices = KieServices.Factory.get();
+	private KieServices kieServices;
+	private Map < String, List < IGPRegle > > tableEvenements;
+	protected static TechniqueExceptionFactory factory = TechniqueExceptionFactory.getInstance(MoteurReglesServiceImpl.class);
 
-	public GPMoteurReglesServiceImpl(final ApplicationContext applicationContext,
-		final ConfigurationComposantTechnique configuration) {
-		super(applicationContext, configuration);
-	}
-
-	@Override
-	public void initialiseBaseConnaissance() {
-		if (kContainer != null) {
-			return;
-		} else {
-			kieServices = KieServices.Factory.get();
-			kContainer = getKieContainer();
-		}
-
-		if (kContainer == null) {
+	public GPMoteurReglesServiceImpl() {
+		kieServices = KieServices.Factory.get();
+		getKieRepository();
+		if (kieServices == null) {
 			factory.throwTechnicalException(Constantes.ERR_CREATION_KB);
 		}
+
+		Resource[] fichiersRegles = getFichiersRegles();
+		tableEvenements = analyseFichiersRegles(fichiersRegles);
+
 	}
 
 	private void getKieRepository() {
@@ -76,15 +70,11 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 		});
 	}
 
-	public KieContainer getKieContainer() {
-		getKieRepository();
-		Resource[] fichiersRegles = getFichiersRegles();
-
-		analyseFichiersRegles(fichiersRegles);
+	public KieContainer getKieContainer(final List < IGPRegle > regles) {
 
 		KieBuilder kb;
 		try {
-			kb = kieServices.newKieBuilder(kieFileSystem(fichiersRegles));
+			kb = kieServices.newKieBuilder(kieFileSystem(regles));
 		} catch (IOException e) {
 			return null;
 		}
@@ -96,9 +86,11 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 		return kContainer;
 	}
 
-	private List < IRegle > analyseFichiersRegles(final Resource[] fichiersRegles) {
+	private Map < String, List < IGPRegle > > analyseFichiersRegles(final Resource[] fichiersRegles) {
 
-		List < IRegle > resultat = new ArrayList <>();
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		Map < String, List < IGPRegle > > resultat = new HashMap <>();
+
 		for (Resource fichierRegles : fichiersRegles) {
 			try {
 				String ruleContent = IOUtils.toString(fichierRegles.getInputStream(), StandardCharsets.UTF_8.name());
@@ -110,42 +102,82 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 						// La règle est syntaxiquement correcte
 						List < RuleDescr > regles = pkgDescr.getRules();
 						for (RuleDescr descripteur : regles) {
-							Regle regle = new Regle();
-							CaseInsensitiveList annotations = new CaseInsensitiveList();
-							annotations.addAll(descripteur.getAnnotationNames());
 
-							if (annotations.contains(NOM_ANNOTATION_IGNORE)) {
+							Regle regle = new Regle();
+
+							Set < String > annotationNames = descripteur.getAnnotationNames();
+							Map < String, String > annotations = new CaseInsensitiveMap();
+							for (String annotation : annotationNames) {
+								annotations.put(annotation, annotation);
+							}
+
+							if (annotations.containsKey(NOM_ANNOTATION_IGNORE)) {
 								// L'annotation @Ignore est présente, la règle est ignorée
 								continue;
 							}
 
-							if (annotations.contains(NOM_ANNOTATION_CODE_ONP)) {
-								regle.setCode(descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_CODE_ONP))
-									.getSingleValue());
-							}
-
-							if (annotations.contains(NOM_ANNOTATION_LIBELLE)) {
-								regle.setLibelle(descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_LIBELLE))
-									.getSingleValue());
-							}
-
-							if (annotations.contains(NOM_ANNOTATION_LIBELLE)) {
-								regle.setLibelle(descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_LIBELLE))
-									.getSingleValue());
-							}
-
-							regle.setBloquante(annotations.contains(NOM_ANNOTATION_BLOQUANTE));
-
-							if (annotations.contains(NOM_ANNOTATION_EVENEMENTS)) {
-								String aux = descripteur.getAnnotation(annotations.getOriginalValue(NOM_ANNOTATION_EVENEMENTS))
+							if (annotations.containsKey(NOM_ANNOTATION_EVENEMENTS)) {
+								String aux = descripteur.getAnnotation(annotations.get(NOM_ANNOTATION_EVENEMENTS))
 									.getSingleValue();
 								String[] split = aux.split(",");
 								regle.setEvenements(Arrays.asList(split));
 							} else {
-								regle.setEvenements(new ArrayList <>());
+								// Une règle sans évènements doit être ignorée
+								continue;
 							}
 
-							resultat.add(regle);
+							if (annotations.containsKey(NOM_ANNOTATION_CODE_ONP)) {
+								regle.setCode(
+									descripteur.getAnnotation(annotations.get(NOM_ANNOTATION_CODE_ONP)).getSingleValue());
+							}
+
+							if (annotations.containsKey(NOM_ANNOTATION_LIBELLE)) {
+								regle.setLibelle(
+									descripteur.getAnnotation(annotations.get(NOM_ANNOTATION_LIBELLE)).getSingleValue());
+							}
+
+							regle.setBloquante(annotations.containsKey(NOM_ANNOTATION_BLOQUANTE));
+
+							if (annotations.containsKey(NOM_ANNOTATION_DATE_DEBUT_VALIDITE)) {
+								String aux = descripteur.getAnnotation(annotations.get(NOM_ANNOTATION_DATE_DEBUT_VALIDITE))
+									.getSingleValue();
+								try {
+									Date date = format.parse(aux);
+									regle.setDateDebutApplication(date);
+								} catch (ParseException e) {
+									// La date est ignorée
+								}
+							}
+
+							if (annotations.containsKey(NOM_ANNOTATION_DATE_FIN_VALIDITE)) {
+								String aux = descripteur.getAnnotation(annotations.get(NOM_ANNOTATION_DATE_FIN_VALIDITE))
+									.getSingleValue();
+								try {
+									Date date = format.parse(aux);
+									regle.setDateFinApplication(date);
+								} catch (ParseException e) {
+									// La date est ignorée
+								}
+							}
+
+							if (annotations.containsKey(NOM_ANNOTATION_POPULATIONS)) {
+								String aux = descripteur.getAnnotation(annotations.get(NOM_ANNOTATION_POPULATIONS))
+									.getSingleValue();
+								String[] split = aux.split(",");
+								regle.setPopulations(Arrays.asList(split));
+							} else {
+								regle.setPopulations(new ArrayList <>());
+							}
+
+							for (String evenement : regle.getEvenements()) {
+								String evt = evenement.toLowerCase();
+								if (!resultat.containsKey(evt)) {
+									resultat.put(evt, new ArrayList <>());
+								}
+								List < IGPRegle > aux = resultat.get(evt);
+
+								aux.add(new RegleFichier(regle, fichierRegles));
+							}
 						}
 					}
 
@@ -173,14 +205,97 @@ public class GPMoteurReglesServiceImpl extends MoteurReglesServiceImpl {
 		return resources;
 	}
 
-	public KieFileSystem kieFileSystem(final Resource[] fichiersRegles) throws IOException {
+	public KieFileSystem kieFileSystem(final List < IGPRegle > regles) throws IOException {
 		KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
 
-		for (Resource fichierRegles : fichiersRegles) {
-			kieFileSystem.write(ResourceFactory.newFileResource(fichierRegles.getFile()));
+		for (IGPRegle regle : regles) {
+			kieFileSystem.write(ResourceFactory.newFileResource(regle.getResource().getFile()));
 		}
 
 		return kieFileSystem;
+	}
+
+	public KieSession retourneSessionPourRegles(final String evenement, final String population, final Date jourExecution,
+		final GPResultat resultat) {
+		// On détermine les règles correspondant à l'évènement
+		final List < IGPRegle > regles = tableEvenements.get(evenement.toLowerCase());
+		final List < IGPRegle > reglesAVerifier = filtreReglesAVerifier(regles, population, jourExecution, resultat);
+		KieSession session = null;
+		KieContainer container = getKieContainer(reglesAVerifier);
+		session = container.newKieSession();
+		session.addEventListener(new GPAgendaEventListener(resultat));
+		return session;
+	}
+
+	private List < IGPRegle > filtreReglesAVerifier(final List < IGPRegle > regles, final String population,
+		final Date jourExecution, final GPResultat resultat) {
+		List < IGPRegle > reglesAVerifier = new ArrayList <>();
+		for (IGPRegle regle : regles) {
+			boolean ignoree = false;
+			if (!regle.isAppartientPopulation(population)) {
+				resultat.ajouteExecution(new ExecutionRegle(ExecutionRegle.REGLE_IGNOREE, regle,
+					"Règle ignorée car ne concernant pas la population " + population + "."));
+				ignoree = true;
+			}
+
+			if (regle.getDateDebutApplication() != null) {
+				if (jourExecution.before(regle.getDateDebutApplication().getTime())) {
+					resultat.ajouteExecution(new ExecutionRegle(ExecutionRegle.REGLE_IGNOREE, regle,
+						"Règle ignorée car la date d'exécution est antérieure à la date d'application. " + population));
+					ignoree = true;
+				}
+			}
+
+			if (regle.getDateFinApplication() != null) {
+				if (jourExecution.after(regle.getDateFinApplication().getTime())) {
+					resultat.ajouteExecution(new ExecutionRegle(ExecutionRegle.REGLE_IGNOREE, regle,
+						"Règle ignorée car la date d'exécution est postérieure à la date d'application. " + population));
+					ignoree = true;
+				}
+			}
+
+			if (ignoree == false) {
+				// Par défaut une règle est considérée comme non vérifiée
+				resultat.ajouteExecution(new ExecutionRegle(ExecutionRegle.REGLE_NON_VERIFIEE, regle, regle.getLibelle()));
+				reglesAVerifier.add(regle);
+			}
+
+		}
+		return reglesAVerifier;
+	}
+
+	public final GPResultat executerReglesGP(final Set < IFait > faits, final String evenement) {
+		GPResultat resultat = new GPResultat();
+		String population = getPopulation(faits);
+		Date jourExecution = getJourExecution(faits);
+		KieSession kSession = retourneSessionPourRegles(evenement, population, jourExecution, resultat);
+
+		for (IFait fait : faits) {
+			kSession.insert(fait);
+		}
+		kSession.fireAllRules();
+		kSession.dispose();
+		return resultat;
+	}
+
+	private String getPopulation(final Set < IFait > faits) {
+		for (IFait fait : faits) {
+			if (fait instanceof IFournisseurPopulation) {
+				return ((IFournisseurPopulation) fait).getCodePopulation();
+			}
+		}
+		return IFournisseurPopulation.NO_POPULATION;
+	}
+
+	private Date getJourExecution(final Set < IFait > faits) {
+		for (IFait fait : faits) {
+			if (fait instanceof IFournisseurJourExecution) {
+				return ((IFournisseurJourExecution) fait).getJourExecution();
+			}
+		}
+
+		Calendar calendrier = Calendar.getInstance();
+		return calendrier.getTime();
 	}
 
 }

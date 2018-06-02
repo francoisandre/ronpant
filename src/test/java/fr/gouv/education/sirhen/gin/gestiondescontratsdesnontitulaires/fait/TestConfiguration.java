@@ -2,14 +2,10 @@ package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 
 import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import fr.gouv.education.sirhen.ct.moteurregles.service.IMoteurReglesService;
 import fr.gouv.education.sirhen.ct.moteurregles.service.impl.GPMoteurReglesServiceImpl;
-import fr.gouv.education.sirhen.ct.moteurregles.service.impl.MoteurReglesServiceImpl;
 import fr.gouv.education.sirhen.ct.moteurregles.transverse.Constantes;
 import fr.gouv.education.sirhen.ct.socle.configuration.ConfigurationComposantTechnique;
 
@@ -25,12 +21,12 @@ public class TestConfiguration {
 
 	}
 
-	@Autowired
-	private ApplicationContext appContext;
+	// @Autowired
+	// private ApplicationContext appContext;
 
 	@Bean
-	public IMoteurReglesService getMoteurRegles() {
-		MoteurReglesServiceImpl resultat = new GPMoteurReglesServiceImpl(appContext, getConfiguration());
+	public GPMoteurReglesServiceImpl getMoteurRegles() {
+		GPMoteurReglesServiceImpl resultat = new GPMoteurReglesServiceImpl();
 		return resultat;
 	}
 
