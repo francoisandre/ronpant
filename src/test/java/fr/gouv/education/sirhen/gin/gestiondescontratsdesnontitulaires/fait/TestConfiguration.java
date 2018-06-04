@@ -25,7 +25,7 @@ public class TestConfiguration {
 	// private ApplicationContext appContext;
 
 	@Bean
-	public GPMoteurReglesServiceImpl getMoteurRegles() {
+	public GPMoteurReglesServiceImpl getMoteurRegles() throws Exception {
 		GPMoteurReglesServiceImpl resultat = new GPMoteurReglesServiceImpl();
 		return resultat;
 	}
