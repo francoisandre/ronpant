@@ -1,39 +1,39 @@
 package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
 
 public class ContratFait implements IFait {
 
-	private Date dateDebutLienJuridique;
-	private Date dateFinPrevisionelleLienJuridique;
-	private Date dateFinReelLienJuridique;
+	private Calendar dateDebutLienJuridique;
+	private Calendar dateFinPrevisionelleLienJuridique;
+	private Calendar dateFinReelLienJuridique;
 	private String typeContrat;
 	private String idContrat;
 	private String typeLienJuridique;
 
-	public Date getDateDebutLienJuridique() {
+	public Calendar getDateDebutLienJuridique() {
 		return dateDebutLienJuridique;
 	}
 
-	public void setDateDebutLienJuridique(final Date dateDebutLienJuridique) {
+	public void setDateDebutLienJuridique(final Calendar dateDebutLienJuridique) {
 		this.dateDebutLienJuridique = dateDebutLienJuridique;
 	}
 
-	public Date getDateFinPrevisionelleLienJuridique() {
+	public Calendar getDateFinPrevisionelleLienJuridique() {
 		return dateFinPrevisionelleLienJuridique;
 	}
 
-	public void setDateFinPrevisionelleLienJuridique(final Date dateFinPrevisionelleLienJuridique) {
+	public void setDateFinPrevisionelleLienJuridique(final Calendar dateFinPrevisionelleLienJuridique) {
 		this.dateFinPrevisionelleLienJuridique = dateFinPrevisionelleLienJuridique;
 	}
 
-	public Date getDateFinReelLienJuridique() {
+	public Calendar getDateFinReelLienJuridique() {
 		return dateFinReelLienJuridique;
 	}
 
-	public void setDateFinReelLienJuridique(final Date dateFinReelLienJuridique) {
+	public void setDateFinReelLienJuridique(final Calendar dateFinReelLienJuridique) {
 		this.dateFinReelLienJuridique = dateFinReelLienJuridique;
 	}
 

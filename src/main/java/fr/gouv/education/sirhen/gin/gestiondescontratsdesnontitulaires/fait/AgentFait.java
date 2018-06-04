@@ -1,20 +1,20 @@
 package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
 
 public class AgentFait implements IFait, IFournisseurPopulation {
 
-	private Date dateEntreeFonctionPublique;
-	private Date dateLimiteRetraite;
+	private Calendar dateEntreeFonctionPublique;
+	private Calendar dateLimiteRetraite;
 	private String codePopulation;
 
-	public Date getDateEntreeFonctionPublique() {
+	public Calendar getDateEntreeFonctionPublique() {
 		return dateEntreeFonctionPublique;
 	}
 
-	public void setDateEntreeFonctionPublique(final Date dateEntreeFonctionPublique) {
+	public void setDateEntreeFonctionPublique(final Calendar dateEntreeFonctionPublique) {
 		this.dateEntreeFonctionPublique = dateEntreeFonctionPublique;
 	}
 
@@ -26,11 +26,11 @@ public class AgentFait implements IFait, IFournisseurPopulation {
 		this.codePopulation = codePopulation;
 	}
 
-	public Date getDateLimiteRetraite() {
+	public Calendar getDateLimiteRetraite() {
 		return dateLimiteRetraite;
 	}
 
-	public void setDateLimiteRetraite(final Date dateLimiteRetraite) {
+	public void setDateLimiteRetraite(final Calendar dateLimiteRetraite) {
 		this.dateLimiteRetraite = dateLimiteRetraite;
 	}
 
