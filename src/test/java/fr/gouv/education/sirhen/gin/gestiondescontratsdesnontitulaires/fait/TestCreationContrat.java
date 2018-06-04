@@ -116,7 +116,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		faits.add(autreContrat);
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_005 doit être non vérifiée", regleEstVerifiee("RAN_C_005", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_005 doit être non vérifiée", regleEstNonVerifiee("RAN_C_005", resultatExecution));
 	}
 
 	/**
