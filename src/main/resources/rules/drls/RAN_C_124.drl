@@ -26,7 +26,6 @@ rule "RAN_C_124"
 	@NoyauONP(16.00.00)
 	@Evenements(T1592) 
 	@Populations(P0199)
-	@Bloquante
 	@Libelle("La date de fin réelle du contrat est inférieure à la date limite de départ à la retraite.")
     when
     	$contrat : ContratFait(dateFinReelLienJuridique != null)

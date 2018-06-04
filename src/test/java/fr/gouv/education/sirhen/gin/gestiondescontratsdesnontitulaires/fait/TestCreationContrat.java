@@ -179,7 +179,6 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setDateFinReelLienJuridique(parseDate("31/08/2018"));
 		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
@@ -202,7 +201,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		faits.add(autreContrat);
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_024 doit être non vérifiée", regleEstVerifiee("RAN_C_024", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_024 doit être non vérifiée", regleEstNonVerifiee("RAN_C_024", resultatExecution));
 	}
 
 	/**

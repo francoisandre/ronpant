@@ -26,7 +26,6 @@ rule "RAN_C_927"
 	@NoyauONP(16.00.00)
 	@Evenements(T1592) 
 	@Populations(P0199)
-	@Bloquante
 	@Libelle("Les éléments suivants : Identifiant contrat, Date début du lien juridique, Type de contrat et Lien juridique doivent être renseignés dans le contrat de l'agent.")
     when
         ContratFait(idContrat != null, dateDebutLienJuridique != null, typeContrat != null, typeLienJuridique != null) 
