@@ -310,6 +310,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 
 		Set < IFait > faits = new HashSet <>();
 		faits.add(contrat);
+		faits.add(new FournisseurPopulationBasique(IPopulations.MAITRE_DU_PRIVE));
 
 		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_400 doit être vérifiée", regleEstVerifiee("RAN_C_400", resultatExecution));
@@ -322,9 +323,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
 		faits.add(autreContrat);
+		faits.add(new FournisseurPopulationBasique(IPopulations.MAITRE_DU_PRIVE));
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_400 doit être non vérifiée", regleEstVerifiee("RAN_C_400", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_400 doit être non vérifiée", regleEstNonVerifiee("RAN_C_400", resultatExecution));
 	}
 
 	/**
