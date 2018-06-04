@@ -34,5 +34,4 @@ rule "RAN_C_001"
         $contratFait : ContratFait(dateDebutLienJuridique != null, eval(DateUtil.afterIncludePrecisionJour(dateDebutLienJuridique,$agent.dateEntreeFonctionPublique)))
          
     then
-        System.out.println( "Coucou");
 end
