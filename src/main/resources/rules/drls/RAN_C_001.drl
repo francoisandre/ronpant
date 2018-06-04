@@ -17,6 +17,7 @@
 package org.drools.examples.helloworld
 dialect "mvel"
  
+import fr.gouv.education.sirhen.ct.moteurregles.transverse.util.DateUtil;
 import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.AgentFait;
 import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait.ContratFait;
 
@@ -29,7 +30,9 @@ rule "RAN_C_001"
 	@Libelle("La date de début du contrat est postèrieure ou égale à la date d'entrée dans la FPE ou dans la carrière militaire.")
 	@Commentaire("Nous avons effectué telle correctif dans la règle...")
     when
-        eval(true)
+        $agent : AgentFait(dateEntreeFonctionPublique != null) 
+        $contratFait : ContratFait(dateDebutLienJuridique != null, eval(DateUtil.afterIncludePrecisionJour(dateDebutLienJuridique,$agent.dateEntreeFonctionPublique)))
+         
     then
         System.out.println( "Coucou");
 end

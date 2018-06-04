@@ -2,6 +2,7 @@ package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,7 +64,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		faits.add(contrat);
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_001 doit être non vérifiée", regleEstVerifiee("RAN_C_001", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_001 doit être non vérifiée", regleEstNonVerifiee("RAN_C_001", resultatExecution));
 
 		AgentFait encoreUnautreAgent = new AgentFait();
 		encoreUnautreAgent.setDateLimiteRetraite(parseDate("01/09/2035"));
@@ -73,7 +74,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		faits.add(contrat);
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_001 doit être non vérifiée", regleEstVerifiee("RAN_C_001", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_001 doit être non vérifiée", regleEstNonVerifiee("RAN_C_001", resultatExecution));
 
 	}
 
@@ -410,7 +411,11 @@ public class TestCreationContrat extends AbstractTestRegles {
 	 * @return Date
 	 * @throws ParseException
 	 */
-	private Date parseDate(final String DateStr) throws ParseException {
-		return new SimpleDateFormat("dd/MM/yyyy").parse(DateStr);
+	private Calendar parseDate(final String DateStr) throws ParseException {
+
+		Date date = new SimpleDateFormat("dd/MM/yyyy").parse(DateStr);
+		Calendar calendrier = Calendar.getInstance();
+		calendrier.setTime(date);
+		return calendrier;
 	}
 }
