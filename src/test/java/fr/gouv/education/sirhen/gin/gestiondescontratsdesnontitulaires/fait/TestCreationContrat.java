@@ -44,7 +44,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -94,7 +94,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -108,7 +108,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait autreContrat = new ContratFait();
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2017"));
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
@@ -136,7 +136,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
 		contrat.setDateFinReelLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -151,7 +151,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/09/2017"));
 		autreContrat.setDateFinReelLienJuridique(parseDate("30/08/2017"));
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
 
@@ -180,7 +180,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
 		contrat.setDateFinReelLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -194,7 +194,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait autreContrat = new ContratFait();
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("02/09/2035"));
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
@@ -222,7 +222,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
 		contrat.setDateFinReelLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -237,7 +237,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
 		autreContrat.setDateFinReelLienJuridique(parseDate("16/09/2018"));
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
@@ -260,7 +260,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -273,7 +273,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait autreContrat = new ContratFait();
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
 		faits.add(autreContrat);
@@ -283,7 +283,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 
 		ContratFait encoreUnAutreContrat = new ContratFait();
 		encoreUnAutreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		encoreUnAutreContrat.setTypeContrat("CDD");
+		encoreUnAutreContrat.setTypeContrat(ContratFait.CDD);
 		encoreUnAutreContrat.setIdContrat("DUPOND20180016");
 		encoreUnAutreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
@@ -304,7 +304,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -317,7 +317,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait autreContrat = new ContratFait();
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setIdContrat("DUPOND20180016");
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
@@ -338,12 +338,13 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
 		Set < IFait > faits = new HashSet <>();
 		faits.add(contrat);
+		faits.add(new FournisseurPopulationBasique(IPopulations.MAITRE_DU_PRIVE));
 
 		GPResultat resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
 		Assert.assertTrue("La règle RAN_C_451 doit être vérifiée", regleEstVerifiee("RAN_C_451", resultatExecution));
@@ -356,9 +357,10 @@ public class TestCreationContrat extends AbstractTestRegles {
 		autreContrat.setTypeLienJuridique("01");
 		faits = new HashSet <>();
 		faits.add(autreContrat);
+		faits.add(new FournisseurPopulationBasique(IPopulations.MAITRE_DU_PRIVE));
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_451 doit être non vérifiée", regleEstVerifiee("RAN_C_451", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_451 doit être non vérifiée", regleEstNonVerifiee("RAN_C_451", resultatExecution));
 	}
 
 	/**
@@ -372,7 +374,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait contrat = new ContratFait();
 		contrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		contrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		contrat.setTypeContrat("CDD");
+		contrat.setTypeContrat(ContratFait.CDD);
 		contrat.setIdContrat("DUPOND20180016");
 		contrat.setTypeLienJuridique("01");
 
@@ -393,7 +395,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		ContratFait autreContrat = new ContratFait();
 		autreContrat.setDateDebutLienJuridique(parseDate("01/09/2017"));
 		autreContrat.setDateFinPrevisionelleLienJuridique(parseDate("31/08/2018"));
-		autreContrat.setTypeContrat("CDD");
+		autreContrat.setTypeContrat(ContratFait.CDD);
 		autreContrat.setIdContrat("DUPOND20180016");
 		// autreContrat.setTypeLienJuridique("02");
 		faits = new HashSet <>();

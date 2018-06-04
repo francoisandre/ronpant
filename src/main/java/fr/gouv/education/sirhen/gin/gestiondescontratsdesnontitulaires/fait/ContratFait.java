@@ -13,6 +13,9 @@ public class ContratFait implements IFait {
 	private String idContrat;
 	private String typeLienJuridique;
 
+	public static final String CDD = "TC01";
+	public static final String CDI = "TC02";
+
 	public Calendar getDateDebutLienJuridique() {
 		return dateDebutLienJuridique;
 	}
