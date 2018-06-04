@@ -49,7 +49,7 @@ public class GPMoteurReglesServiceImpl implements IGPAnnotations {
 	private Map < String, List < IGPRegle > > tableEvenements;
 	protected static TechniqueExceptionFactory factory = TechniqueExceptionFactory.getInstance(MoteurReglesServiceImpl.class);
 
-	public GPMoteurReglesServiceImpl() {
+	public GPMoteurReglesServiceImpl() throws Exception {
 		kieServices = KieServices.Factory.get();
 		getKieRepository();
 		if (kieServices == null) {
@@ -86,7 +86,7 @@ public class GPMoteurReglesServiceImpl implements IGPAnnotations {
 		return kContainer;
 	}
 
-	private Map < String, List < IGPRegle > > analyseFichiersRegles(final Resource[] fichiersRegles) {
+	private Map < String, List < IGPRegle > > analyseFichiersRegles(final Resource[] fichiersRegles) throws Exception {
 
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		Map < String, List < IGPRegle > > resultat = new HashMap <>();
@@ -98,6 +98,9 @@ public class GPMoteurReglesServiceImpl implements IGPAnnotations {
 				PackageDescr pkgDescr = null;
 				try {
 					pkgDescr = parser.parse(null, ruleContent);
+					if (pkgDescr == null) {
+						throw new Exception("Le fichier " + fichierRegles.getFilename() + " est syntaxiquement incorrect");
+					}
 					if (pkgDescr != null) {
 						// La règle est syntaxiquement correcte
 						List < RuleDescr > regles = pkgDescr.getRules();
