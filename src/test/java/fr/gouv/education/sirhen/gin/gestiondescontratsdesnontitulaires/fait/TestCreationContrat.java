@@ -212,6 +212,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 	 */
 	@Test
 	public void testRegleRAN_C_124() throws Exception {
+
 		// On fait les IFait nécessaires
 		AgentFait agent = new AgentFait();
 		agent.setDateEntreeFonctionPublique(parseDate("01/09/2017"));
@@ -245,7 +246,7 @@ public class TestCreationContrat extends AbstractTestRegles {
 		faits.add(autreContrat);
 
 		resultatExecution = moteurRegle.executerReglesGP(faits, Constantes.EVENEMENT_CREATION_CONTRAT);
-		Assert.assertFalse("La règle RAN_C_124 doit être non vérifiée", regleEstVerifiee("RAN_C_124", resultatExecution));
+		Assert.assertTrue("La règle RAN_C_124 doit être non vérifiée", regleEstNonVerifiee("RAN_C_124", resultatExecution));
 	}
 
 	/**
