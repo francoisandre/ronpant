@@ -26,7 +26,7 @@ rule "RAN_C_005"
 	@Evenements(T1592) 
 	@Populations(P0199)
 	@Bloquante
-	@Libelle("La date de fin prévisionnelle du contrat est postérieure ou égale à la date de début du contrat")
+	@Libelle("La date de fin prÃ©visionnelle du contrat est postÃ¨rieure ou Ã©gale Ã  la date de dÃ©but du contrat")
 	@Commentaire("On ajoute la contrainte dateDebutLienJuridique!= null, ce qui n'a pas d'impact fonctionnel du fait de RAN_C_927")
    when
 	   ContratFait((dateFinPrevisionelleLienJuridique != null && dateFinReelLienJuridique == null),dateDebutLienJuridique != null , eval(DateUtil.afterIncludePrecisionJour(dateFinPrevisionelleLienJuridique, dateDebutLienJuridique)))

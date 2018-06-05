@@ -10,7 +10,7 @@ rule "RAN_C_024"
 	@NoyauONP(16.00.00)
 	@Evenements(T1592) 
 	@Populations(P0199)
-	@Libelle("La date de fin prévisionnelle du contrat est inférieure à la date limite de départ à la retraite.")
+	@Libelle("La date de fin prÃ©visionnelle du contrat est infÃ©rieure Ã  la date limite de dÃ©part Ã  la retraite.")
     when
      	$contrat : ContratFait(dateFinPrevisionelleLienJuridique != null, dateFinReelLienJuridique == null)
     	AgentFait(eval(DateUtil.afterIncludePrecisionJour(dateLimiteRetraite, $contrat.dateFinPrevisionelleLienJuridique)))   
