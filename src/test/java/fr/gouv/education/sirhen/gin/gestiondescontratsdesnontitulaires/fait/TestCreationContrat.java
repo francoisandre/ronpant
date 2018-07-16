@@ -15,8 +15,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
+import fr.gouv.education.sirhen.ct.moteurregles.service.fait.FournisseurPopulationBasique;
 import fr.gouv.education.sirhen.ct.moteurregles.service.impl.GPMoteurReglesServiceImpl;
 import fr.gouv.education.sirhen.ct.moteurregles.service.impl.GPResultat;
+import fr.gouv.education.sirhen.ct.moteurregles.service.regle.AbstractTestRegles;
 import fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.evenement.Constantes;
 
 @ContextConfiguration(classes = TestConfiguration.class)

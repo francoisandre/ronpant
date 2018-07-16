@@ -26,8 +26,7 @@ rule "RAN_C_FAUSSE"
 	@Evenements(T1593) 
 	@Populations(P0199)
 	@Bloquante
-	@Libelle("La date de début du contrat est postèrieure ou égale à la date d'entrée dans la FPE ou dans la carrière militaire.")
-	@Commentaire("Nous avons effectué telle correctif dans la règle...")
+	@Libelle("Ceci n'est pas une r�gle.")
     when
         eval(true)
     then

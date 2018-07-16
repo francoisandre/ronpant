@@ -3,6 +3,7 @@ package fr.gouv.education.sirhen.gin.gestiondescontratsdesnontitulaires.fait;
 import java.util.Calendar;
 
 import fr.gouv.education.sirhen.ct.moteurregles.commun.IFait;
+import fr.gouv.education.sirhen.ct.moteurregles.service.fait.IFournisseurPopulation;
 
 public class AgentFait implements IFait, IFournisseurPopulation {
 
